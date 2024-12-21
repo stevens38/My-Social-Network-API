@@ -29,7 +29,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
  * @returns a single Student object
 */
 export const getUserById = async (req: Request, res: Response) => {
-    const { usertId } = req.params;
+    const { userId } = req.params;
     try {
         const user = await User.findById(userId);
         if (user) {
