@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 import {
-  getAllCThoughts,
+  getAllThoughts,
   getThoughtsById,
   createThoughts,
   updateThoughts,

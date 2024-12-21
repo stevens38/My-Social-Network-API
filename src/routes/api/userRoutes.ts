@@ -21,4 +21,4 @@ router.route('/:userId/assignments').post(addAssignment);
 // /api/students/:studentId/assignments/:assignmentId
 router.route('/:userId/assignments/:assignmentId').delete(removeAssignment);
 
-export { router as studentRouter} ;
+export { router as userRouter} ;

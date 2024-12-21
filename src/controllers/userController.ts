@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
-import { User, Thought } from '../models/index.js';
+import { User, Thoughts } from '../models/index.js';
 
 
 /**
@@ -31,7 +31,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
     const { usertId } = req.params;
     try {
-        const user = await Student.findById(userId);
+        const user = await User.findById(userId);
         if (user) {
             res.json({
                 user,
@@ -76,7 +76,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'No such user exists' });
         }
 
-        const thought = await Thought.findOneAndUpdate(
+        const thought = await Thoughts.findOneAndUpdate(
             { users: req.params.userId },
             { $pull: { user: req.params.userId } },
             { new: true }
@@ -106,7 +106,7 @@ export const addAssignment = async (req: Request, res: Response) => {    //addAs
     console.log('You are adding an assignment');
     console.log(req.body);
     try {
-        const student = await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { _id: req.params.usertId },
             { $addToSet: { assignments: req.body } },
             { runValidators: true, new: true }
@@ -133,7 +133,7 @@ export const addAssignment = async (req: Request, res: Response) => {    //addAs
 
 export const removeAssignment = async (req: Request, res: Response) => {       //removeAssignment needs updated to....
     try {
-        const student = await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { _id: req.params.usertId },
             { $pull: { assignments: { assignmentId: req.params.assignmentId } } },
             { runValidators: true, new: true }
@@ -145,7 +145,7 @@ export const removeAssignment = async (req: Request, res: Response) => {       /
                 .json({ message: 'No user found with that ID :(' });
         }
 
-        return res.json(student);
+        return res.json(user);
     } catch (err) {
         return res.status(500).json(err);
     }

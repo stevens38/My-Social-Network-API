@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Thought, User } from '../models/index.js';
+import { Thoughts, User } from '../models/index.js';
 
 /**
  * GET All Courses /courses
@@ -7,7 +7,7 @@ import { Thought, User } from '../models/index.js';
 */
 export const getAllThoughts = async(_req: Request, res: Response) => {
     try {
-        const courses = await Thought.find();
+        const courses = await Thoughts.find();
         res.json(courses);
     } catch(error: any){
         res.status(500).json({
@@ -24,9 +24,9 @@ export const getAllThoughts = async(_req: Request, res: Response) => {
 export const getThoughtById = async (req: Request, res: Response) => {
     const { thoughtId } = req.params;
     try {
-      const thought = await Thought.findById(thoughtId);    // check...
-      if(user) {
-        res.json(user);
+      const thought = await Thoughts.findById(thoughtId);    // check...
+      if(User) {
+        res.json(User);
       } else {
         res.status(404).json({
           message: 'Volunteer not found'
@@ -47,7 +47,7 @@ export const getThoughtById = async (req: Request, res: Response) => {
 export const createThought = async (req: Request, res: Response) => {
     const { thought } = req.body;
     try {
-      const newCourse = await Thought.create({
+      const newThought = await Thoughts.create({
         thought
       });
       res.status(201).json(newThought);
@@ -65,7 +65,7 @@ export const createThought = async (req: Request, res: Response) => {
 */
 export const updateThought = async (req: Request, res: Response) => {
     try {
-      const thought = await Thought.findOneAndUpdate(
+      const thought = await Thoughts.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $set: req.body },
         { runValidators: true, new: true }
@@ -90,7 +90,7 @@ export const updateThought = async (req: Request, res: Response) => {
 */
 export const deleteThought = async (req: Request, res: Response) => {
     try {
-      const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId});
+      const thought = await Thoughts.findOneAndDelete({ _id: req.params.thoughtId});
       
       if(!thought) {
         res.status(404).json({
