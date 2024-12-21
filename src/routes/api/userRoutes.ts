@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 import {
-  getAllUser,
+  getAllUsers,
   getUserById,
   createUser,
   deleteUser,
@@ -10,7 +10,7 @@ import {
 } from '../../controllers/userController.js';
 
 // /api/students
-router.route('/').get(getAllUser).post(createUser);
+router.route('/').get(getAllUsers).post(createUser);
 
 // /api/students/:studentId
 router.route('/:studentId').get(getUserById).delete(deleteUser);
