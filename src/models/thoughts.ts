@@ -1,47 +1,72 @@
-import { Schema, model, type Document } from 'mongoose';
-
-interface IThoughts extends Document {
-    name: string,
-    inPerson: boolean,
-    start: Date,
-    end: Date,
-    students: Schema.Types.ObjectId[]
+import { Schema, model, Types, Document } from 'mongoose';
+interface IReaction {
+    reactionId: Schema.Types.ObjectId;
+    reactionBody: string;
+    username: string;
+    createdAt: Date;
 }
-
-const thoughtsSchema = new Schema<IThoughts>(
+interface IThought extends Document {
+    thoughtText: string;
+    createdAt: Date;
+    username: string;
+    reactions: IReaction[]; // Updated to match the nested schema
+}
+const reactionSchema = new Schema<IReaction>(
     {
-        name: {
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            maxlength: 280,
+        },
+        username: {
             type: String,
             required: true,
         },
-        inPerson: {
-            type: Boolean,
-            default: true,
-        },
-        start: {
+        createdAt: {
             type: Date,
-            default: Date.now(),
+            default: Date.now,
+            /*get: (timestamp: Date | undefined) => (timestamp ? new Date(timestamp).toLocaleDateString() : ''),*/
         },
-        end: {
+    },
+    {
+        toJSON: {
+            getters: true,
+        },
+        id: false,
+    }
+);
+const thoughtSchema = new Schema<IThought>(
+    {
+        thoughtText: {
+            type: String,
+            required: true,
+            maxlength: 280,
+        },
+        createdAt: {
             type: Date,
-            // Sets a default value of 12 weeks from now
-            default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),
+            default: Date.now,
+            /*get: (timestamp: Date | undefined) => (timestamp ? new Date(timestamp).toLocaleDateString() : ''),*/
         },
-        students: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'user',
-            },
-        ],
+        username: {
+            type: String,
+            required: true,
+        },
+        reactions: [reactionSchema],
     },
     {
         toJSON: {
             virtuals: true,
+            getters: true,
         },
-        timestamps: true
-    },
+        id: false,
+    }
 );
-
-const Thoughts = model<IThoughts>('Thoughts', thoughtsSchema);
-
-export default Thoughts;
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+});
+const Thought = model<IThought>('Thought', thoughtSchema);
+export { Thought };
