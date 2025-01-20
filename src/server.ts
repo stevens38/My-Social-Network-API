@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './routes/index.js';
+import router from './routes/index.js';
 import db from './config/connections.js';
 
 
@@ -9,7 +9,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
-app.use(routes);
+app.use(router);
 
 db.once('open', () => {
 app.listen(PORT, () => {

@@ -1,4 +1,11 @@
 import mongoose from 'mongoose';
+mongoose.connect('mongodb://127.0.0.1:27017/developersApplications');
+export default mongoose.connection;
+
+
+
+/*
+import mongoose from 'mongoose';
 
 const db = async (): Promise<typeof mongoose.connection> =>{
     try {
@@ -12,3 +19,4 @@ const db = async (): Promise<typeof mongoose.connection> =>{
 }
 
 export default db;
+*/
